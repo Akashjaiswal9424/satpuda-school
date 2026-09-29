@@ -6,7 +6,7 @@ const API_URL = 'https://satpuda-school.onrender.com';
 
 // ============ CORE FETCH ============
 async function apiRequest(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
+  const url = `${API_URL}${endpoint}`;
   const config = {
     method: options.method || 'GET',
     headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
