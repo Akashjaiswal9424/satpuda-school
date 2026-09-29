@@ -3,6 +3,7 @@
 // ============================================================
 
 const API_URL = 'https://satpuda-school.onrender.com';
+const API_BASE = API_URL;   // ← Ye nayi line add karo
 
 // ============ CORE FETCH ============
 async function apiRequest(endpoint, options = {}) {
