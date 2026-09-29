@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Admin Panel | Satpuda Valley School</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: {
+    fontFamily: { poppins:['Poppins','sans-serif'], inter:['Inter','sans-serif'] },
+    colors: { brand: {
+      forest:'#0a341b', primary:'#114b27', mid:'#1a6b38', light:'#2d8a4e',
+      mintbg:'#f2f9f4', surface:'#e8f5e9', gold:'#e6a117', brightgold:'#ffbe2e',
+      dark:'#062011', darkbg:'#05140b', darkcard:'#0a2314'
+    }}
+  }}
+};
+</script>
+<style>
+body { font-family: 'Inter', sans-serif; }
+h1,h2,h3,h4,h5,h6 { font-family: 'Poppins', sans-serif; }
+.sidebar-link.active { background: rgba(255,190,46,0.15); color: #ffbe2e; border-left: 3px solid #ffbe2e; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #1a6b38; border-radius: 4px; }
+#sidebar { transition: transform 0.3s ease; }
+</style>
+</head>
+<body class="bg-slate-100 dark:bg-brand-darkbg text-slate-800 dark:text-slate-100 antialiased">
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-forest via-brand-primary to-brand-dark p-4 relative overflow-hidden">
+  <div class="absolute top-20 left-20 w-72 h-72 bg-brand-brightgold/10 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+
+  <div class="w-full max-w-md bg-white dark:bg-brand-darkcard rounded-3xl shadow-2xl border-2 border-brand-brightgold/40 overflow-hidden relative z-10">
+    <div class="bg-brand-forest p-6 text-center">
+      <div class="w-16 h-16 mx-auto rounded-full bg-brand-brightgold flex items-center justify-center mb-3 shadow-lg">
+        <i class="fa-solid fa-user-shield text-brand-forest text-2xl"></i>
+      </div>
+      <h1 class="text-xl font-black text-white">Admin Portal</h1>
+      <p class="text-xs text-emerald-300 mt-1">Satpuda Valley International Public School</p>
+    </div>
+
+    <form id="loginForm" class="p-6 space-y-4">
+      <div class="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-300 text-xs text-amber-900 dark:text-amber-200">
+        <i class="fa-solid fa-info-circle mr-1"></i>
+        <strong>Default:</strong> admin@satpudaschool.com / Admin@1234
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-300 mb-1">Email</label>
+        <div class="relative">
+          <i class="fa-solid fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="email" id="loginEmail" required placeholder="admin@satpudaschool.com" value="admin@satpudaschool.com"
+            class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 dark:bg-brand-dark text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-mid" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase text-slate-600 dark:text-slate-300 mb-1">Password</label>
+        <div class="relative">
+          <i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input type="password" id="loginPassword" required placeholder="••••••••"
+            class="w-full pl-9 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 dark:bg-brand-dark text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-mid" />
+          <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
+            <i id="eyeIcon" class="fa-solid fa-eye text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="loginError" class="hidden text-xs text-red-600 bg-red-50 dark:bg-red-950/50 p-2.5 rounded-lg border border-red-200"></div>
+
+      <button type="submit" id="loginBtn"
+        class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest font-black uppercase text-sm hover:brightness-110 shadow-lg flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span>Login to Dashboard</span>
+      </button>
+
+      <a href="index.html" class="block text-center text-xs text-brand-mid dark:text-brand-brightgold hover:underline pt-2">
+        <i class="fa-solid fa-arrow-left mr-1"></i> Back to Homepage
+      </a>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="hidden min-h-screen flex">
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="w-64 bg-brand-forest text-white flex flex-col shadow-2xl fixed lg:static inset-y-0 left-0 z-40 transform -translate-x-full lg:translate-x-0">
+    <div class="p-5 border-b border-brand-mid/40 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-brand-brightgold flex items-center justify-center shrink-0">
+        <i class="fa-solid fa-graduation-cap text-brand-forest"></i>
+      </div>
+      <div class="min-w-0 flex-1">
+        <div class="text-sm font-black truncate">Satpuda Valley</div>
+        <div class="text-[10px] text-emerald-300 uppercase">Admin Panel</div>
+      </div>
+      <button onclick="toggleSidebar()" class="ml-auto lg:hidden text-white/70"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <nav class="flex-1 py-4 overflow-y-auto">
+      <a href="#" data-tab="overview" class="sidebar-link active flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-chart-line w-5"></i> Overview</a>
+      <a href="#" data-tab="analytics" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-chart-pie w-5"></i> Analytics</a>
+      <a href="#" data-tab="enquiries" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-envelope w-5"></i> Enquiries <span id="enqBadge" class="ml-auto bg-brand-brightgold text-brand-forest text-[10px] font-black px-2 py-0.5 rounded-full hidden">0</span></a>
+      <a href="#" data-tab="notices" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-bullhorn w-5"></i> Notices</a>
+      <a href="#" data-tab="videos" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-video w-5"></i> Videos</a>
+      <a href="#" data-tab="gallery" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-images w-5"></i> Gallery</a>
+      <a href="#" data-tab="albums" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-folder-open w-5"></i> Photo Albums</a>
+      <a href="#" data-tab="faculty" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-chalkboard-user w-5"></i> Faculty</a>
+      <a href="#" data-tab="downloads" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-download w-5"></i> Downloads</a>
+      <a href="#" data-tab="fees" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-rupee-sign w-5"></i> Fee Structure</a>
+      <a href="#" data-tab="events" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-calendar-days w-5"></i> Events</a>
+      <a href="#" data-tab="testimonials" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-comments w-5"></i> Testimonials</a>
+      <a href="#" data-tab="achievements" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-trophy w-5"></i> Achievements</a>
+      <a href="#" data-tab="news" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-newspaper w-5"></i> News</a>
+      <a href="#" data-tab="holidays" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-calendar-xmark w-5"></i> Holidays</a>
+      <a href="#" data-tab="careers" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-briefcase w-5"></i> Careers</a>
+      <a href="#" data-tab="alumni" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-user-graduate w-5"></i> Alumni</a>
+      <a href="#" data-tab="payments" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-credit-card w-5"></i> Payments</a>
+      <a href="#" data-tab="bulk-notify" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-brands fa-whatsapp w-5"></i> Bulk Notify</a>
+      <a href="#" data-tab="timetable" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-calendar-check w-5"></i> Timetable</a>
+      <a href="#" data-tab="live-classes" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-video w-5"></i> Live Classes</a>
+      <a href="#" data-tab="attendance" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-user-check w-5"></i> Attendance</a>
+      <a href="#" data-tab="settings" class="sidebar-link flex items-center gap-3 px-5 py-3 text-sm font-semibold hover:bg-white/10 transition"><i class="fa-solid fa-gear w-5"></i> Settings</a>
+    </nav>
+
+    <div class="p-4 border-t border-brand-mid/40">
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-full bg-brand-brightgold flex items-center justify-center font-black text-brand-forest">AD</div>
+        <div class="min-w-0 flex-1">
+          <div class="text-xs font-bold truncate">Admin</div>
+          <div class="text-[10px] text-emerald-300 flex items-center gap-1">
+            <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Online
+          </div>
+        </div>
+      </div>
+      <button onclick="handleLogout()" class="w-full text-xs py-2 rounded-lg bg-red-500/20 hover:bg-red-500/40 text-red-200 font-bold flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 overflow-y-auto h-screen">
+    <header class="bg-white dark:bg-brand-darkcard border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="lg:hidden text-slate-700 dark:text-slate-200"><i class="fa-solid fa-bars text-xl"></i></button>
+        <div>
+          <h1 id="pageTitle" class="text-lg font-black text-brand-forest dark:text-white">Overview</h1>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400">Welcome back, Admin!</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-brand-surface dark:bg-emerald-950 text-brand-mid dark:text-brand-brightgold hidden sm:inline-block">
+          <i class="fa-solid fa-external-link-alt mr-1"></i> View Site
+        </a>
+        <button onclick="toggleDark()" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center">
+          <i id="darkIcon" class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="p-6">
+
+      <!-- ================= OVERVIEW ================= -->
+      <section data-content="overview" class="tab-content active">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-xs font-bold text-slate-500 uppercase">New Enquiries</div>
+                <div id="statEnquiries" class="text-3xl font-black text-amber-600 mt-1">0</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center"><i class="fa-solid fa-envelope text-amber-600 text-xl"></i></div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-xs font-bold text-slate-500 uppercase">Active Notices</div>
+                <div id="statNotices" class="text-3xl font-black text-red-600 mt-1">0</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-950 flex items-center justify-center"><i class="fa-solid fa-bullhorn text-red-600 text-xl"></i></div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-xs font-bold text-slate-500 uppercase">Videos</div>
+                <div id="statVideos" class="text-3xl font-black text-purple-600 mt-1">0</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-950 flex items-center justify-center"><i class="fa-solid fa-video text-purple-600 text-xl"></i></div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-xs font-bold text-slate-500 uppercase">Gallery Photos</div>
+                <div id="statGallery" class="text-3xl font-black text-emerald-600 mt-1">0</div>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center"><i class="fa-solid fa-images text-emerald-600 text-xl"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-brand-darkcard p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <h3 class="text-sm font-black text-brand-forest dark:text-white uppercase mb-4"><i class="fa-solid fa-bolt text-brand-brightgold mr-1"></i> Quick Actions</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <button onclick="switchTab('notices')" class="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-100 text-xs font-bold flex flex-col items-center gap-2"><i class="fa-solid fa-bullhorn text-xl text-amber-600"></i> Post Notice</button>
+            <button onclick="switchTab('albums')" class="p-4 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-100 text-xs font-bold flex flex-col items-center gap-2"><i class="fa-solid fa-image text-xl text-purple-600"></i> Upload Photo</button>
+            <button onclick="switchTab('videos')" class="p-4 rounded-xl bg-brand-surface dark:bg-emerald-950 text-brand-forest dark:text-emerald-100 text-xs font-bold flex flex-col items-center gap-2"><i class="fa-solid fa-video text-xl text-brand-mid"></i> Add Video</button>
+            <button onclick="switchTab('enquiries')" class="p-4 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-sky-800 dark:text-sky-100 text-xs font-bold flex flex-col items-center gap-2"><i class="fa-solid fa-inbox text-xl text-sky-600"></i> Enquiries</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ANALYTICS ================= -->
+      <section data-content="analytics" class="tab-content">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-5 rounded-2xl shadow-lg">
+            <div class="text-xs font-bold uppercase opacity-80">Total Enquiries</div>
+            <div id="anaTotalEnq" class="text-3xl font-black mt-1">0</div>
+            <div id="anaWeeklyEnq" class="text-[11px] mt-1 opacity-90"></div>
+          </div>
+          <div class="bg-gradient-to-br from-emerald-500 to-emerald-700 text-white p-5 rounded-2xl shadow-lg">
+            <div class="text-xs font-bold uppercase opacity-80">Revenue</div>
+            <div id="anaRevenue" class="text-3xl font-black mt-1">₹0</div>
+            <div id="anaMonthRevenue" class="text-[11px] mt-1 opacity-90"></div>
+          </div>
+          <div class="bg-gradient-to-br from-purple-500 to-purple-700 text-white p-5 rounded-2xl shadow-lg">
+            <div class="text-xs font-bold uppercase opacity-80">Payments</div>
+            <div id="anaPayments" class="text-3xl font-black mt-1">0</div>
+            <div id="anaPaidPayments" class="text-[11px] mt-1 opacity-90"></div>
+          </div>
+          <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-white p-5 rounded-2xl shadow-lg">
+            <div class="text-xs font-bold uppercase opacity-80">Content</div>
+            <div id="anaContent" class="text-3xl font-black mt-1">0</div>
+            <div class="text-[11px] mt-1 opacity-90">Items published</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+            <h4 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-folder text-brand-brightgold mr-1"></i> Content Overview</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-bullhorn text-red-600 mr-2"></i>Notices</span><span id="anaNotices" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-video text-purple-600 mr-2"></i>Videos</span><span id="anaVideos" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-images text-emerald-600 mr-2"></i>Gallery</span><span id="anaGallery" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-chalkboard-user text-blue-600 mr-2"></i>Faculty</span><span id="anaFaculty" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-trophy text-amber-600 mr-2"></i>Achievements</span><span id="anaAchievements" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-newspaper text-indigo-600 mr-2"></i>News</span><span id="anaNews" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-briefcase text-pink-600 mr-2"></i>Jobs</span><span id="anaJobs" class="font-black">0</span></div>
+              <div class="flex justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark"><span class="text-sm font-bold"><i class="fa-solid fa-user-graduate text-teal-600 mr-2"></i>Alumni</span><span id="anaAlumni" class="font-black">0</span></div>
+            </div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+            <h4 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-ranking-star text-brand-brightgold mr-1"></i> Top Enquiry Classes</h4>
+            <div id="anaTopClasses"><div class="text-center text-slate-500 text-xs py-4">Loading...</div></div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mt-6">
+          <h4 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-clock-rotate-left text-brand-brightgold mr-1"></i> Recent Enquiries</h4>
+          <div id="anaRecentEnq"><div class="text-center text-slate-500 text-xs py-4">Loading...</div></div>
+        </div>
+      </section>
+
+      <!-- ================= ENQUIRIES ================= -->
+      <section data-content="enquiries" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+            <h3 class="text-sm font-black uppercase"><i class="fa-solid fa-envelope text-brand-brightgold mr-1"></i> Admission Enquiries</h3>
+            <select id="filterEnqStatus" onchange="loadEnquiries()" class="text-xs px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+              <option value="">All</option><option value="new">New</option><option value="contacted">Contacted</option>
+              <option value="follow-up">Follow-up</option><option value="admitted">Admitted</option><option value="rejected">Rejected</option>
+            </select>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50 dark:bg-brand-dark uppercase font-bold">
+                <tr>
+                  <th class="p-3 text-left">Date</th><th class="p-3 text-left">Parent</th><th class="p-3 text-left">Child</th>
+                  <th class="p-3 text-left">Class</th><th class="p-3 text-left">Phone</th><th class="p-3 text-left">Status</th><th class="p-3 text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody id="enqTbody"><tr><td colspan="7" class="p-6 text-center text-slate-500">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= NOTICES ================= -->
+      <section data-content="notices" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Post New Notice</h3>
+          <form id="noticeForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="nTitle" placeholder="Title (English)" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="nTitleHi" placeholder="शीर्षक (हिन्दी)" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <textarea id="nContent" rows="3" placeholder="Content..." required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <select id="nCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>General</option><option>Admission</option><option>Exam</option><option>Holiday</option><option>Event</option><option>Result</option><option>Urgent</option>
+              </select>
+              <input type="number" id="nPriority" placeholder="Priority" value="5" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <label class="flex items-center gap-2 text-xs font-bold px-3">
+                <input type="checkbox" id="nTicker" class="w-4 h-4" /> Show in Ticker
+              </label>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Publish
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800">
+            <h3 class="text-sm font-black uppercase"><i class="fa-solid fa-list text-brand-brightgold mr-1"></i> All Notices</h3>
+          </div>
+          <div id="noticesList" class="divide-y divide-slate-200 dark:divide-slate-800">
+            <div class="p-6 text-center text-slate-500 text-xs">Loading...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIDEOS ================= -->
+      <section data-content="videos" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Video</h3>
+          <form id="videoForm" class="space-y-3">
+            <input type="text" id="vTitle" placeholder="Video Title" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <input type="url" id="vUrl" placeholder="YouTube Embed URL (https://www.youtube.com/embed/XXXX)" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="vBadge" placeholder="Badge (e.g. Parent Review)" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="url" id="vThumb" placeholder="Thumbnail URL (optional)" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add Video
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="videosGrid">
+          <div class="col-span-3 text-center text-slate-500 text-xs py-6">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ================= GALLERY ================= -->
+      <section data-content="gallery" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-cloud-arrow-up text-brand-brightgold mr-1"></i> Upload Photo</h3>
+          <form id="galleryForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="gTitle" placeholder="Photo Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="gCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>Campus</option><option>Events</option><option>Sports</option><option>Classroom</option><option>Annual Day</option><option>Other</option>
+              </select>
+            </div>
+            <input type="file" id="gFile" accept="image/*" required class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-mid file:text-white file:font-bold" />
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-upload mr-1"></i> Upload
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3" id="galleryGrid">
+          <div class="col-span-4 text-center text-slate-500 text-xs py-6">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ================= ALBUMS ================= -->
+      <section data-content="albums" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Create Album</h3>
+          <form id="albumForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="albumName" placeholder="Album name (e.g. Annual Day 2026)" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="albumDesc" placeholder="Description (optional)" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Create Album
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="albumsAdminList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="col-span-3 text-center text-slate-500 text-xs py-6">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ================= FACULTY ================= -->
+      <section data-content="faculty" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-user-plus text-brand-brightgold mr-1"></i> Add Faculty</h3>
+          <form id="facultyForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="fName" placeholder="Full Name" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="fDesignation" placeholder="Designation" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="fSubject" placeholder="Subject" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="fQualification" placeholder="Qualification" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="file" id="fPhoto" accept="image/*" class="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-brand-mid file:text-white" />
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="facultyGrid">
+          <div class="col-span-4 text-center text-slate-500 text-xs py-6">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ================= DOWNLOADS ================= -->
+      <section data-content="downloads" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-file-arrow-up text-brand-brightgold mr-1"></i> Upload File</h3>
+          <form id="downloadForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="dTitle" placeholder="File Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="dCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>Admission</option><option>Syllabus</option><option>Holiday</option><option>TC</option><option>Bonafide</option><option>Fee</option><option>Circular</option><option>Other</option>
+              </select>
+            </div>
+            <input type="file" id="dFile" accept=".pdf,.doc,.docx,.xls,.xlsx" required class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-mid file:text-white file:font-bold" />
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-upload mr-1"></i> Upload
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div id="downloadsList" class="divide-y divide-slate-200 dark:divide-slate-800">
+            <div class="p-6 text-center text-slate-500 text-xs">Loading...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FEES ================= -->
+      <section data-content="fees" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Fee Structure</h3>
+          <form id="feeForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="feeClass" placeholder="Class Range" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="number" id="feeAmount" placeholder="Amount (₹)" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="feeFeatures" placeholder="Features (comma-separated)" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <label class="flex items-center gap-2 text-xs font-bold"><input type="checkbox" id="feePopular" class="w-4 h-4" /> Mark as Popular</label>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="feesList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= EVENTS ================= -->
+      <section data-content="events" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Event</h3>
+          <form id="eventForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="eTitle" placeholder="Event Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="date" id="eDate" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="eVenue" placeholder="Venue" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="eCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>General</option><option>Event</option><option>Holiday</option><option>Exam</option><option>Function</option><option>Sports</option>
+              </select>
+            </div>
+            <textarea id="eDesc" rows="2" placeholder="Description" class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add Event
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="eventsList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= TESTIMONIALS ================= -->
+      <section data-content="testimonials" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Testimonial</h3>
+          <form id="testimonialForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="tName" placeholder="Name" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="tRole" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>Parent</option><option>Student</option><option>Alumni</option>
+              </select>
+              <input type="text" id="tLocation" placeholder="Location" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <textarea id="tMessage" rows="3" placeholder="Testimonial message..." required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <input type="file" id="tPhoto" accept="image/*" class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-mid file:text-white file:font-bold" />
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="testimonialsList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= ACHIEVEMENTS ================= -->
+      <section data-content="achievements" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Achievement</h3>
+          <form id="achievementForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="achTitle" placeholder="Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="achCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>Academic</option><option>Sports</option><option>Cultural</option><option>Award</option><option>Other</option>
+              </select>
+              <input type="text" id="achYear" placeholder="Year" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <textarea id="achDesc" rows="2" placeholder="Description" class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <input type="file" id="achImage" accept="image/*" class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-mid file:text-white file:font-bold" />
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="achievementsList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= NEWS ================= -->
+      <section data-content="news" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Publish News</h3>
+          <form id="newsForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="nwTitle" placeholder="Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="nwCategory" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>General</option><option>Admission</option><option>Event</option><option>Achievement</option><option>Notice</option>
+              </select>
+            </div>
+            <textarea id="nwExcerpt" rows="2" placeholder="Short summary" class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <textarea id="nwContent" rows="5" placeholder="Full content..." required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            <input type="file" id="nwImage" accept="image/*" class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-mid file:text-white file:font-bold" />
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-paper-plane mr-1"></i> Publish
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="newsAdminList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= HOLIDAYS ================= -->
+      <section data-content="holidays" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Add Holiday</h3>
+          <form id="holidayForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="hTitle" placeholder="Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="date" id="hDate" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="date" id="hEndDate" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <select id="hType" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option>Holiday</option><option>Festival</option><option>Vacation</option>
+              </select>
+              <input type="text" id="hDesc" placeholder="Description" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Add Holiday
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="holidaysAdminList" class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 divide-y divide-slate-200 dark:divide-slate-800">
+          <div class="text-center text-slate-500 text-xs py-6">Loading...</div>
+        </div>
+      </section>
+
+      <!-- ================= CAREERS ================= -->
+      <section data-content="careers" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Post Job</h3>
+          <form id="careerForm" class="space-y-3">
+            <input type="text" id="cPosition" placeholder="Position" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input type="text" id="cQual" placeholder="Qualification" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="cExp" placeholder="Experience" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="cSalary" placeholder="Salary" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="date" id="cLastDate" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <textarea id="cDesc" rows="2" placeholder="Description" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Post Job
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="careersAdminList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= ALUMNI ================= -->
+      <section data-content="alumni" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+            <h3 class="text-sm font-black uppercase"><i class="fa-solid fa-user-graduate text-brand-brightgold mr-1"></i> Alumni Registrations</h3>
+            <span id="alumniCount" class="text-xs font-bold text-slate-500"></span>
+          </div>
+          <div id="alumniAdminList" class="divide-y divide-slate-200 dark:divide-slate-800">
+            <div class="p-6 text-center text-slate-500 text-xs">Loading...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAYMENTS ================= -->
+      <section data-content="payments" class="tab-content">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div class="text-xs font-bold text-slate-500 uppercase">Total Payments</div>
+            <div id="payTotal" class="text-3xl font-black text-brand-forest dark:text-brand-brightgold mt-1">0</div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div class="text-xs font-bold text-slate-500 uppercase">Successful</div>
+            <div id="payPaid" class="text-3xl font-black text-emerald-600 mt-1">0</div>
+          </div>
+          <div class="bg-white dark:bg-brand-darkcard p-5 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div class="text-xs font-bold text-slate-500 uppercase">Total Collected</div>
+            <div id="payCollected" class="text-3xl font-black text-brand-gold mt-1">₹ 0</div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+            <h3 class="text-sm font-black uppercase"><i class="fa-solid fa-list text-brand-brightgold mr-1"></i> All Payments</h3>
+            <button onclick="loadPaymentsAdmin()" class="text-xs px-3 py-1.5 rounded-lg bg-brand-mid text-white font-bold"><i class="fa-solid fa-rotate"></i></button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead class="bg-slate-50 dark:bg-brand-dark uppercase font-bold">
+                <tr>
+                  <th class="p-3 text-left">Date</th><th class="p-3 text-left">Student</th><th class="p-3 text-left">Class</th>
+                  <th class="p-3 text-left">Purpose</th><th class="p-3 text-center">Amount</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="paymentsTbody"><tr><td colspan="7" class="p-6 text-center text-slate-500">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= BULK NOTIFY ================= -->
+      <section data-content="bulk-notify" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-2"><i class="fa-brands fa-whatsapp text-emerald-600 mr-1"></i> Send WhatsApp Message</h3>
+          <p class="text-xs text-slate-500 mb-4">यह tool आपको WhatsApp पर quick links देता है। हर button पर click करें → Send दबाएं → अगला।</p>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold uppercase mb-1">Message Type</label>
+              <select id="waTemplate" onchange="loadWaTemplate()" class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option value="custom">Custom Message</option>
+                <option value="fee">Fee Reminder</option>
+                <option value="exam">Exam Notice</option>
+                <option value="holiday">Holiday Notice</option>
+                <option value="ptm">Parent-Teacher Meeting</option>
+                <option value="result">Result Declared</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase mb-1">Message Text</label>
+              <textarea id="waMessage" rows="4" placeholder="Type message..." class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white"></textarea>
+              <p class="text-[11px] text-slate-500 mt-1">Tip: <strong>{name}</strong> लिखें — auto replace होगा।</p>
+            </div>
+            <button onclick="generateWaLinks()" class="w-full py-3 rounded-lg bg-emerald-600 text-white font-black text-sm hover:bg-emerald-700">
+              <i class="fa-solid fa-bolt mr-1"></i> Generate WhatsApp Links
+            </button>
+          </div>
+        </div>
+        <div id="waLinksContainer" class="hidden">
+          <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-4 mb-3">
+            <h4 class="text-sm font-black"><i class="fa-solid fa-list text-brand-brightgold mr-1"></i> <span id="waCount">0</span> Parents</h4>
+          </div>
+          <div id="waLinksList" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+      </section>
+
+      <!-- ================= TIMETABLE ================= -->
+      <section data-content="timetable" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Set Timetable</h3>
+          <form id="timetableForm" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <select id="ttClass" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option value="">Select Class</option>
+                <option>Nursery / KG</option><option>Class 1</option><option>Class 2</option>
+                <option>Class 3</option><option>Class 4</option><option>Class 5</option>
+                <option>Class 6</option><option>Class 7</option><option>Class 8</option>
+                <option>Class 9</option><option>Class 10</option>
+              </select>
+              <select id="ttDay" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option value="">Select Day</option>
+                <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+                <option>Thursday</option><option>Friday</option><option>Saturday</option>
+              </select>
+            </div>
+            <div class="bg-slate-50 dark:bg-brand-dark p-4 rounded-xl">
+              <div class="text-xs font-bold uppercase mb-3">Periods (6)</div>
+              <div id="periodRows" class="space-y-2"></div>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Save
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="timetableAdminList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= LIVE CLASSES ================= -->
+      <section data-content="live-classes" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-plus-circle text-brand-brightgold mr-1"></i> Schedule Live Class</h3>
+          <form id="liveClassForm" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="lcTitle" placeholder="Title" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <select id="lcClass" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+                <option value="">Class</option>
+                <option>Nursery / KG</option><option>Class 1</option><option>Class 5</option>
+                <option>Class 8</option><option>Class 9</option><option>Class 10</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="lcSubject" placeholder="Subject" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="text" id="lcTeacher" placeholder="Teacher" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <input type="url" id="lcLink" placeholder="Google Meet / Zoom Link" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="datetime-local" id="lcTime" required class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+              <input type="number" id="lcDuration" placeholder="Duration (min)" value="45" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-5 py-2.5 text-sm font-black rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest">
+                <i class="fa-solid fa-plus mr-1"></i> Schedule
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="liveClassesAdminList" class="space-y-3"><div class="text-center text-slate-500 text-xs py-6">Loading...</div></div>
+      </section>
+
+      <!-- ================= ATTENDANCE ================= -->
+      <section data-content="attendance" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 mb-6">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-user-check text-brand-brightgold mr-1"></i> Mark Attendance</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+            <select id="attClass" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white">
+              <option value="">Select Class</option>
+              <option>Nursery / KG</option><option>Class 1</option><option>Class 5</option>
+              <option>Class 8</option><option>Class 9</option><option>Class 10</option>
+            </select>
+            <input type="date" id="attDate" class="px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <button onclick="loadAttendanceSheet()" class="px-4 py-2.5 rounded-lg bg-brand-mid text-white font-bold text-sm">Load Sheet</button>
+          </div>
+          <div id="attSheet" class="space-y-2 max-h-96 overflow-y-auto bg-slate-50 dark:bg-brand-dark p-3 rounded-xl">
+            <div class="text-center text-slate-500 text-xs py-4">Select class & date</div>
+          </div>
+          <div id="attSaveSection" class="hidden mt-4 flex justify-between items-center">
+            <button onclick="addAttendanceRow()" class="px-4 py-2 rounded-lg bg-brand-surface dark:bg-emerald-950 text-brand-mid text-xs font-bold">
+              <i class="fa-solid fa-plus mr-1"></i> Add Student Row
+            </button>
+            <button onclick="saveAttendance()" class="px-5 py-2.5 rounded-lg bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest font-black text-sm">
+              <i class="fa-solid fa-floppy-disk mr-1"></i> Save
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SETTINGS ================= -->
+      <section data-content="settings" class="tab-content">
+        <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-6 max-w-xl">
+          <h3 class="text-sm font-black uppercase mb-4"><i class="fa-solid fa-lock text-brand-brightgold mr-1"></i> Change Password</h3>
+          <form id="pwdForm" class="space-y-3">
+            <input type="password" id="curPwd" placeholder="Current Password" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <input type="password" id="newPwd" placeholder="New Password (min 6)" required minlength="6" class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <input type="password" id="confPwd" placeholder="Confirm" required class="w-full px-3 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-dark dark:text-white" />
+            <button type="submit" class="w-full py-2.5 text-sm font-black rounded-lg bg-brand-mid text-white hover:bg-brand-forest">
+              <i class="fa-solid fa-key mr-1"></i> Update Password
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+// ============================================================
+// INIT
+// ============================================================
+let currentUser = null;
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('sv_token');
+  if (token) {
+    try {
+      const res = await window.API.Auth.me();
+      currentUser = res.user;
+      showDashboard();
+    } catch {
+      localStorage.removeItem('sv_token');
+      showLogin();
+    }
+  } else {
+    showLogin();
+  }
+  if (localStorage.getItem('sv_admin_theme') === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.getElementById('darkIcon')?.classList.replace('fa-moon', 'fa-sun');
+  }
+});
+
+// ============================================================
+// LOGIN
+// ============================================================
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const errBox = document.getElementById('loginError');
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="w-4 h-4 border-2 border-brand-forest/40 border-t-brand-forest rounded-full animate-spin"></div> Signing in...';
+  errBox.classList.add('hidden');
+
+  try {
+    const res = await window.API.Auth.login(email, password);
+    localStorage.setItem('sv_token', res.token);
+    localStorage.setItem('sv_user', JSON.stringify(res.user));
+    currentUser = res.user;
+    window.API.showToast('Login successful!', 'success');
+    showDashboard();
+  } catch (err) {
+    errBox.textContent = err.message || 'Login failed';
+    errBox.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i><span>Login to Dashboard</span>';
+  }
+});
+
+function togglePassword() {
+  const inp = document.getElementById('loginPassword');
+  const icon = document.getElementById('eyeIcon');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  icon.classList.toggle('fa-eye');
+  icon.classList.toggle('fa-eye-slash');
+}
+
+function showLogin() {
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  loadAllData();
+}
+
+async function handleLogout() {
+  if (!confirm('Logout from admin panel?')) return;
+  try { await window.API.Auth.logout(); } catch {}
+  localStorage.removeItem('sv_token');
+  localStorage.removeItem('sv_user');
+  currentUser = null;
+  showLogin();
+  window.API.showToast('Logged out', 'info');
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.sidebar-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    switchTab(link.dataset.tab);
+  });
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.toggle('active', l.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.toggle('active', t.dataset.content === tab));
+  const titles = {
+    overview:'Overview', analytics:'Analytics', enquiries:'Admission Enquiries', notices:'Notices',
+    videos:'Videos', gallery:'Gallery', albums:'Photo Albums', faculty:'Faculty', downloads:'Downloads',
+    fees:'Fee Structure', events:'Events', testimonials:'Testimonials', achievements:'Achievements',
+    news:'News', holidays:'Holidays', careers:'Careers', alumni:'Alumni', payments:'Payments',
+    'bulk-notify':'Bulk WhatsApp', timetable:'Timetable', 'live-classes':'Live Classes',
+    attendance:'Attendance', settings:'Settings'
+  };
+  document.getElementById('pageTitle').textContent = titles[tab] || tab;
+  if (window.innerWidth < 1024) toggleSidebar();
+  loadTabData(tab);
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('-translate-x-full');
+  document.getElementById('sidebarOverlay').classList.toggle('hidden');
+}
+
+function toggleDark() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('sv_admin_theme', isDark ? 'dark' : 'light');
+  document.getElementById('darkIcon').classList.toggle('fa-moon', !isDark);
+  document.getElementById('darkIcon').classList.toggle('fa-sun', isDark);
+}
+
+// ============================================================
+// LOAD DATA
+// ============================================================
+async function loadAllData() {
+  await Promise.allSettled([
+    loadStats(), loadEnquiries(), loadNotices(), loadVideos(),
+    loadGallery(), loadFaculty(), loadDownloads(),
+    loadFeesAdmin(), loadEventsAdmin(), loadTestimonialsAdmin(),
+    loadAchievementsAdmin(), loadNewsAdmin(), loadHolidaysAdmin(),
+    loadCareersAdmin(), loadAlumniAdmin(), loadPaymentsAdmin(),
+    loadTimetableAdmin(), loadLiveClassesAdmin(), loadAlbumsAdmin(),
+    loadAnalytics()
+  ]);
+}
+
+function loadTabData(tab) {
+  const map = {
+    overview: loadStats, analytics: loadAnalytics, enquiries: loadEnquiries, notices: loadNotices,
+    videos: loadVideos, gallery: loadGallery, albums: loadAlbumsAdmin, faculty: loadFaculty,
+    downloads: loadDownloads, fees: loadFeesAdmin, events: loadEventsAdmin,
+    testimonials: loadTestimonialsAdmin, achievements: loadAchievementsAdmin,
+    news: loadNewsAdmin, holidays: loadHolidaysAdmin, careers: loadCareersAdmin,
+    alumni: loadAlumniAdmin, payments: loadPaymentsAdmin, timetable: loadTimetableAdmin,
+    'live-classes': loadLiveClassesAdmin
+  };
+  map[tab]?.();
+}
+
+async function loadStats() {
+  try {
+    const [e, n, v, g] = await Promise.allSettled([
+      window.API.Enquiries.list({ limit: 1 }),
+      window.API.Notices.list(),
+      window.API.Videos.list(),
+      window.API.Gallery.list()
+    ]);
+    document.getElementById('statEnquiries').textContent = e.value?.total || 0;
+    document.getElementById('statNotices').textContent = n.value?.notices?.length || 0;
+    document.getElementById('statVideos').textContent = v.value?.videos?.length || 0;
+    document.getElementById('statGallery').textContent = g.value?.images?.length || 0;
+    const enq = e.value?.total || 0;
+    const badge = document.getElementById('enqBadge');
+    if (enq > 0) { badge.textContent = enq; badge.classList.remove('hidden'); }
+  } catch (err) { console.error(err); }
+}
+
+// ============================================================
+// ENQUIRIES
+// ============================================================
+async function loadEnquiries() {
+  const tbody = document.getElementById('enqTbody');
+  tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">Loading...</td></tr>';
+  try {
+    const status = document.getElementById('filterEnqStatus')?.value || '';
+    const params = { limit: 100 };
+    if (status) params.status = status;
+    const res = await window.API.Enquiries.list(params);
+    if (!res.enquiries?.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">No enquiries</td></tr>';
+      return;
+    }
+    const colors = {
+      new:'bg-sky-100 text-sky-800', contacted:'bg-amber-100 text-amber-800',
+      'follow-up':'bg-purple-100 text-purple-800', admitted:'bg-emerald-100 text-emerald-800',
+      rejected:'bg-red-100 text-red-800'
+    };
+    tbody.innerHTML = res.enquiries.map(e => `
+      <tr class="border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-brand-dark">
+        <td class="p-3 text-[11px]">${new Date(e.createdAt).toLocaleDateString('en-IN')}</td>
+        <td class="p-3 font-semibold">${e.parentName}</td>
+        <td class="p-3">${e.childName}</td>
+        <td class="p-3">${e.grade}</td>
+        <td class="p-3"><a href="tel:${e.phone}" class="text-brand-mid hover:underline">${e.phone}</a></td>
+        <td class="p-3">
+          <select onchange="updateEnqStatus('${e._id}', this.value)" class="text-[10px] px-2 py-1 rounded-full border-0 font-bold ${colors[e.status] || 'bg-slate-100'}">
+            ${['new','contacted','follow-up','admitted','rejected'].map(s =>
+              `<option value="${s}" ${e.status === s ? 'selected' : ''}>${s.toUpperCase()}</option>`
+            ).join('')}
+          </select>
+        </td>
+        <td class="p-3 text-center">
+          <a href="https://wa.me/91${e.phone}" target="_blank" class="text-emerald-600 hover:bg-emerald-50 p-1.5 rounded inline-block"><i class="fa-brands fa-whatsapp"></i></a>
+          <button onclick="deleteEnquiry('${e._id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded ml-1"><i class="fa-solid fa-trash text-xs"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500 text-xs">${err.message}</td></tr>`;
+  }
+}
+
+async function updateEnqStatus(id, status) {
+  try { await window.API.Enquiries.update(id, { status }); window.API.showToast('Updated', 'success'); loadStats(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+async function deleteEnquiry(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Enquiries.remove(id); window.API.showToast('Deleted', 'success'); loadEnquiries(); loadStats(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// NOTICES
+// ============================================================
+document.getElementById('noticeForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const payload = {
+    title: document.getElementById('nTitle').value.trim(),
+    titleHi: document.getElementById('nTitleHi').value.trim(),
+    content: document.getElementById('nContent').value.trim(),
+    category: document.getElementById('nCategory').value,
+    priority: Number(document.getElementById('nPriority').value || 5),
+    isTicker: document.getElementById('nTicker').checked
+  };
+  try {
+    window.API.showLoader(true);
+    await window.API.Notices.create(payload);
+    window.API.showToast('Notice published!', 'success');
+    e.target.reset();
+    loadNotices(); loadStats();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+});
+
+async function loadNotices() {
+  const list = document.getElementById('noticesList');
+  if (!list) return;
+  list.innerHTML = '<div class="p-6 text-center text-slate-500 text-xs">Loading...</div>';
+  try {
+    const res = await window.API.Notices.list();
+    if (!res.notices?.length) { list.innerHTML = '<div class="p-6 text-center text-slate-500 text-xs">No notices</div>'; return; }
+    list.innerHTML = res.notices.map(n => `
+      <div class="p-4 flex items-start justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 flex-wrap mb-1">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-brand-surface dark:bg-emerald-950 text-brand-mid">${n.category}</span>
+            ${n.isTicker ? '<span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Ticker</span>' : ''}
+            <span class="text-[10px] text-slate-400">${new Date(n.publishDate).toLocaleDateString()}</span>
+          </div>
+          <h4 class="font-bold text-sm">${n.title}</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2">${n.content}</p>
+        </div>
+        <button onclick="deleteNotice('${n._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="p-6 text-center text-red-500 text-xs">${err.message}</div>`; }
+}
+async function deleteNotice(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Notices.remove(id); window.API.showToast('Deleted', 'success'); loadNotices(); loadStats(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// VIDEOS
+// ============================================================
+document.getElementById('videoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.Videos.create({
+      title: document.getElementById('vTitle').value.trim(),
+      url: document.getElementById('vUrl').value.trim(),
+      badge: document.getElementById('vBadge').value.trim() || 'Recent Video',
+      thumbnail: document.getElementById('vThumb').value.trim() || ''
+    });
+    window.API.showToast('Video added!', 'success');
+    e.target.reset();
+    loadVideos(); loadStats();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+
+async function loadVideos() {
+  const grid = document.getElementById('videosGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="col-span-3 text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Videos.list();
+    if (!res.videos?.length) { grid.innerHTML = '<div class="col-span-3 text-center text-slate-500 text-xs py-6">No videos</div>'; return; }
+    grid.innerHTML = res.videos.map(v => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-3">
+        <div class="aspect-video rounded-xl overflow-hidden bg-slate-900 mb-2">
+          <iframe src="${v.url}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <h4 class="text-xs font-bold line-clamp-2 mb-1">${v.title}</h4>
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-surface dark:bg-emerald-950 text-brand-mid">${v.badge}</span>
+          <button onclick="deleteVideo('${v._id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { grid.innerHTML = `<div class="col-span-3 text-center text-red-500 text-xs py-6">${err.message}</div>`; }
+}
+async function deleteVideo(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Videos.remove(id); window.API.showToast('Deleted', 'success'); loadVideos(); loadStats(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// GALLERY
+// ============================================================
+document.getElementById('galleryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('title', document.getElementById('gTitle').value.trim());
+  fd.append('category', document.getElementById('gCategory').value);
+  fd.append('image', document.getElementById('gFile').files[0]);
+  try {
+    window.API.showLoader(true);
+    await window.API.Gallery.upload(fd);
+    window.API.showToast('Uploaded!', 'success');
+    e.target.reset();
+    loadGallery(); loadStats();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+});
+
+const BACKEND = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000' : 'https://satpuda-school-api.onrender.com';
+
+async function loadGallery() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="col-span-4 text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Gallery.list();
+    if (!res.images?.length) { grid.innerHTML = '<div class="col-span-4 text-center text-slate-500 text-xs py-6">No photos</div>'; return; }
+    grid.innerHTML = res.images.map(g => `
+      <div class="relative group rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800">
+        <img src="${g.imageUrl.startsWith('http') ? g.imageUrl : BACKEND + g.imageUrl}" alt="${g.title}" class="w-full aspect-square object-cover" loading="lazy" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition">
+          <div class="text-[10px] font-bold text-brand-brightgold">${g.category}</div>
+          <div class="text-xs font-bold text-white line-clamp-1">${g.title}</div>
+          <button onclick="deleteGallery('${g._id}')" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center"><i class="fa-solid fa-trash text-[10px]"></i></button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { grid.innerHTML = `<div class="col-span-4 text-center text-red-500 text-xs py-6">${err.message}</div>`; }
+}
+async function deleteGallery(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Gallery.remove(id); window.API.showToast('Deleted', 'success'); loadGallery(); loadStats(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// ALBUMS
+// ============================================================
+document.getElementById('albumForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.Albums.create({
+      name: document.getElementById('albumName').value.trim(),
+      description: document.getElementById('albumDesc').value.trim()
+    });
+    window.API.showToast('Album created!', 'success');
+    e.target.reset();
+    loadAlbumsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+
+async function loadAlbumsAdmin() {
+  const grid = document.getElementById('albumsAdminList');
+  if (!grid) return;
+  grid.innerHTML = '<div class="col-span-3 text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Albums.list();
+    if (!res.albums?.length) { grid.innerHTML = '<div class="col-span-3 text-center text-slate-500 text-xs py-6">No albums</div>'; return; }
+    grid.innerHTML = res.albums.map(a => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="aspect-video bg-slate-900 relative">
+          ${a.coverImage ? `<img src="${a.coverImage.startsWith('http') ? a.coverImage : BACKEND + a.coverImage}" class="w-full h-full object-cover" />` : '<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-images text-4xl text-brand-brightgold/40"></i></div>'}
+          <span class="absolute top-2 right-2 bg-brand-forest text-brand-brightgold text-[10px] font-black px-2 py-1 rounded-full">${a.photos?.length || 0} photos</span>
+        </div>
+        <div class="p-3">
+          <h4 class="font-bold text-sm">${a.name}</h4>
+          <div class="flex gap-2 mt-3">
+            <label class="flex-1 text-center px-3 py-1.5 text-[11px] font-bold rounded-lg bg-brand-mid text-white cursor-pointer hover:bg-brand-forest">
+              <i class="fa-solid fa-plus mr-1"></i>Add Photos
+              <input type="file" accept="image/*" multiple class="hidden" onchange="uploadAlbumPhotos('${a._id}', this.files)" />
+            </label>
+            <button onclick="deleteAlbum('${a._id}')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-red-100 text-red-600"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { grid.innerHTML = `<div class="col-span-3 text-center text-red-500 text-xs py-6">${err.message}</div>`; }
+}
+async function uploadAlbumPhotos(albumId, files) {
+  if (!files?.length) return;
+  const fd = new FormData();
+  for (const f of files) fd.append('photos', f);
+  try {
+    window.API.showLoader(true);
+    await window.API.Albums.addPhotos(albumId, fd);
+    window.API.showToast(`${files.length} photos uploaded!`, 'success');
+    loadAlbumsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+}
+async function deleteAlbum(id) {
+  if (!confirm('Delete album and all photos?')) return;
+  try { await window.API.Albums.remove(id); window.API.showToast('Deleted', 'success'); loadAlbumsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// FACULTY
+// ============================================================
+document.getElementById('facultyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('name', document.getElementById('fName').value.trim());
+  fd.append('designation', document.getElementById('fDesignation').value.trim());
+  fd.append('subject', document.getElementById('fSubject').value.trim());
+  fd.append('qualification', document.getElementById('fQualification').value.trim());
+  const file = document.getElementById('fPhoto').files[0];
+  if (file) fd.append('photo', file);
+  try {
+    await window.API.Faculty.create(fd);
+    window.API.showToast('Faculty added!', 'success');
+    e.target.reset();
+    loadFaculty();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+
+async function loadFaculty() {
+  const grid = document.getElementById('facultyGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="col-span-4 text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Faculty.list();
+    if (!res.faculty?.length) { grid.innerHTML = '<div class="col-span-4 text-center text-slate-500 text-xs py-6">No faculty</div>'; return; }
+    grid.innerHTML = res.faculty.map(f => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-2xl border border-slate-200 dark:border-slate-800 p-4 text-center">
+        <img src="${f.photo ? (f.photo.startsWith('http') ? f.photo : BACKEND + f.photo) : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(f.name) + '&background=114b27&color=fff&size=200'}" class="w-20 h-20 mx-auto rounded-full object-cover mb-3 border-2 border-brand-brightgold" />
+        <h4 class="text-sm font-black">${f.name}</h4>
+        <div class="text-xs text-brand-mid dark:text-brand-brightgold font-bold">${f.designation}</div>
+        <div class="text-[11px] text-slate-500 mt-1">${f.subject || ''}</div>
+        <button onclick="deleteFaculty('${f._id}')" class="mt-3 text-red-500 hover:bg-red-50 p-1.5 rounded text-xs"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { grid.innerHTML = `<div class="col-span-4 text-center text-red-500 text-xs py-6">${err.message}</div>`; }
+}
+async function deleteFaculty(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Faculty.remove(id); window.API.showToast('Deleted', 'success'); loadFaculty(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// DOWNLOADS
+// ============================================================
+document.getElementById('downloadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('title', document.getElementById('dTitle').value.trim());
+  fd.append('category', document.getElementById('dCategory').value);
+  fd.append('file', document.getElementById('dFile').files[0]);
+  try {
+    window.API.showLoader(true);
+    await window.API.Downloads.upload(fd);
+    window.API.showToast('Uploaded!', 'success');
+    e.target.reset();
+    loadDownloads();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+});
+
+async function loadDownloads() {
+  const list = document.getElementById('downloadsList');
+  if (!list) return;
+  list.innerHTML = '<div class="p-6 text-center text-slate-500 text-xs">Loading...</div>';
+  try {
+    const res = await window.API.Downloads.list();
+    if (!res.files?.length) { list.innerHTML = '<div class="p-6 text-center text-slate-500 text-xs">No files</div>'; return; }
+    list.innerHTML = res.files.map(f => `
+      <div class="p-4 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center shrink-0"><i class="fa-solid fa-file-pdf"></i></div>
+          <div class="min-w-0">
+            <div class="text-sm font-bold truncate">${f.title}</div>
+            <div class="text-[10px] text-slate-500">${f.category} • ${f.fileType}</div>
+          </div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <a href="${f.fileUrl.startsWith('http') ? f.fileUrl : BACKEND + f.fileUrl}" target="_blank" class="text-brand-mid hover:bg-brand-surface p-2 rounded-lg"><i class="fa-solid fa-download text-xs"></i></a>
+          <button onclick="deleteDownload('${f._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="p-6 text-center text-red-500 text-xs">${err.message}</div>`; }
+}
+async function deleteDownload(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Downloads.remove(id); window.API.showToast('Deleted', 'success'); loadDownloads(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// FEES
+// ============================================================
+document.getElementById('feeForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const features = document.getElementById('feeFeatures').value.split(',').map(s => s.trim()).filter(Boolean);
+  try {
+    await window.API.Fees.create({
+      classRange: document.getElementById('feeClass').value.trim(),
+      amount: Number(document.getElementById('feeAmount').value),
+      features,
+      isPopular: document.getElementById('feePopular').checked
+    });
+    window.API.showToast('Fee added!', 'success');
+    e.target.reset();
+    loadFeesAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadFeesAdmin() {
+  const list = document.getElementById('feesList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Fees.list();
+    if (!res.fees?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No fees</div>'; return; }
+    list.innerHTML = res.fees.map(f => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between gap-4">
+        <div>
+          <div class="font-bold">${f.classRange} ${f.isPopular ? '<span class="text-[10px] bg-brand-brightgold text-brand-forest px-2 py-0.5 rounded-full ml-2">POPULAR</span>' : ''}</div>
+          <div class="text-brand-mid dark:text-brand-brightgold font-black text-lg">₹ ${f.amount.toLocaleString('en-IN')}</div>
+          <div class="text-xs text-slate-500 mt-1">${(f.features || []).join(' • ')}</div>
+        </div>
+        <button onclick="deleteFee('${f._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteFee(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Fees.remove(id); window.API.showToast('Deleted', 'success'); loadFeesAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+document.getElementById('eventForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.Events.create({
+      title: document.getElementById('eTitle').value.trim(),
+      eventDate: document.getElementById('eDate').value,
+      venue: document.getElementById('eVenue').value.trim(),
+      category: document.getElementById('eCategory').value,
+      description: document.getElementById('eDesc').value.trim()
+    });
+    window.API.showToast('Event added!', 'success');
+    e.target.reset();
+    loadEventsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadEventsAdmin() {
+  const list = document.getElementById('eventsList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Events.list();
+    if (!res.events?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No events</div>'; return; }
+    list.innerHTML = res.events.map(ev => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between gap-4">
+        <div>
+          <div class="text-[10px] font-black uppercase text-brand-mid dark:text-brand-brightgold">${ev.category}</div>
+          <div class="font-bold">${ev.title}</div>
+          <div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-calendar mr-1"></i>${new Date(ev.eventDate).toLocaleDateString('en-IN')}${ev.venue ? ` • ${ev.venue}` : ''}</div>
+        </div>
+        <button onclick="deleteEvent('${ev._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteEvent(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Events.remove(id); window.API.showToast('Deleted', 'success'); loadEventsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// TESTIMONIALS
+// ============================================================
+document.getElementById('testimonialForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('name', document.getElementById('tName').value.trim());
+  fd.append('role', document.getElementById('tRole').value);
+  fd.append('location', document.getElementById('tLocation').value.trim());
+  fd.append('message', document.getElementById('tMessage').value.trim());
+  const file = document.getElementById('tPhoto').files[0];
+  if (file) fd.append('photo', file);
+  try {
+    await window.API.Testimonials.create(fd);
+    window.API.showToast('Added!', 'success');
+    e.target.reset();
+    loadTestimonialsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadTestimonialsAdmin() {
+  const list = document.getElementById('testimonialsList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Testimonials.list();
+    if (!res.testimonials?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No testimonials</div>'; return; }
+    list.innerHTML = res.testimonials.map(t => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-start justify-between gap-4">
+        <div>
+          <div class="font-bold">${t.name} <span class="text-[10px] bg-brand-surface dark:bg-emerald-950 text-brand-mid px-2 py-0.5 rounded-full ml-1">${t.role}</span></div>
+          <div class="text-xs text-slate-500 mt-0.5">${t.location || ''}</div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-2 italic">"${t.message}"</p>
+        </div>
+        <button onclick="deleteTestimonial('${t._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteTestimonial(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Testimonials.remove(id); window.API.showToast('Deleted', 'success'); loadTestimonialsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// ACHIEVEMENTS
+// ============================================================
+document.getElementById('achievementForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('title', document.getElementById('achTitle').value.trim());
+  fd.append('category', document.getElementById('achCategory').value);
+  fd.append('year', document.getElementById('achYear').value.trim());
+  fd.append('description', document.getElementById('achDesc').value.trim());
+  const img = document.getElementById('achImage').files[0];
+  if (img) fd.append('image', img);
+  try {
+    await window.API.Achievements.create(fd);
+    window.API.showToast('Added!', 'success');
+    e.target.reset();
+    loadAchievementsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadAchievementsAdmin() {
+  const list = document.getElementById('achievementsList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Achievements.list();
+    if (!res.achievements?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No achievements</div>'; return; }
+    list.innerHTML = res.achievements.map(a => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <div class="text-[10px] font-black uppercase text-brand-mid">${a.category} ${a.year ? '• ' + a.year : ''}</div>
+          <div class="font-bold">${a.title}</div>
+          <div class="text-xs text-slate-500 mt-1 line-clamp-2">${a.description || ''}</div>
+        </div>
+        <button onclick="deleteAchievement('${a._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteAchievement(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Achievements.remove(id); window.API.showToast('Deleted', 'success'); loadAchievementsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// NEWS
+// ============================================================
+document.getElementById('newsForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('title', document.getElementById('nwTitle').value.trim());
+  fd.append('category', document.getElementById('nwCategory').value);
+  fd.append('excerpt', document.getElementById('nwExcerpt').value.trim());
+  fd.append('content', document.getElementById('nwContent').value.trim());
+  const img = document.getElementById('nwImage').files[0];
+  if (img) fd.append('image', img);
+  try {
+    window.API.showLoader(true);
+    await window.API.News.create(fd);
+    window.API.showToast('News published!', 'success');
+    e.target.reset();
+    loadNewsAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+});
+async function loadNewsAdmin() {
+  const list = document.getElementById('newsAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.News.list();
+    if (!res.news?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No news</div>'; return; }
+    list.innerHTML = res.news.map(n => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-start justify-between gap-4">
+        <div class="min-w-0 flex-1">
+          <div class="text-[10px] font-black uppercase text-brand-mid">${n.category} • ${new Date(n.createdAt).toLocaleDateString('en-IN')}</div>
+          <div class="font-bold">${n.title}</div>
+          <div class="text-xs text-slate-500 mt-1 line-clamp-2">${n.excerpt || n.content.substring(0, 100)}</div>
+        </div>
+        <button onclick="deleteNews('${n._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteNews(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.News.remove(id); window.API.showToast('Deleted', 'success'); loadNewsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// HOLIDAYS
+// ============================================================
+document.getElementById('holidayForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.Holidays.create({
+      title: document.getElementById('hTitle').value.trim(),
+      date: document.getElementById('hDate').value,
+      endDate: document.getElementById('hEndDate').value || undefined,
+      type: document.getElementById('hType').value,
+      description: document.getElementById('hDesc').value.trim()
+    });
+    window.API.showToast('Holiday added!', 'success');
+    e.target.reset();
+    loadHolidaysAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadHolidaysAdmin() {
+  const list = document.getElementById('holidaysAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Holidays.list();
+    if (!res.holidays?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No holidays</div>'; return; }
+    list.innerHTML = res.holidays.map(h => `
+      <div class="p-4 flex items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2"><span class="font-bold">${h.title}</span><span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-brand-surface dark:bg-emerald-950 text-brand-mid">${h.type}</span></div>
+          <div class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-calendar mr-1"></i>${new Date(h.date).toLocaleDateString('en-IN')}${h.endDate ? ` → ${new Date(h.endDate).toLocaleDateString('en-IN')}` : ''}</div>
+        </div>
+        <button onclick="deleteHoliday('${h._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteHoliday(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Holidays.remove(id); window.API.showToast('Deleted', 'success'); loadHolidaysAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// CAREERS
+// ============================================================
+document.getElementById('careerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.Careers.create({
+      position: document.getElementById('cPosition').value.trim(),
+      qualification: document.getElementById('cQual').value.trim(),
+      experience: document.getElementById('cExp').value.trim(),
+      salary: document.getElementById('cSalary').value.trim(),
+      lastDate: document.getElementById('cLastDate').value || undefined,
+      description: document.getElementById('cDesc').value.trim()
+    });
+    window.API.showToast('Job posted!', 'success');
+    e.target.reset();
+    loadCareersAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadCareersAdmin() {
+  const list = document.getElementById('careersAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Careers.list();
+    if (!res.jobs?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No jobs</div>'; return; }
+    list.innerHTML = res.jobs.map(j => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-start justify-between gap-4">
+        <div>
+          <div class="font-bold">${j.position}</div>
+          <div class="text-xs text-slate-500 mt-1">${[j.qualification, j.experience, j.salary].filter(Boolean).join(' • ')}</div>
+        </div>
+        <button onclick="deleteJob('${j._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg shrink-0"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteJob(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Careers.remove(id); window.API.showToast('Deleted', 'success'); loadCareersAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// ALUMNI
+// ============================================================
+async function loadAlumniAdmin() {
+  const list = document.getElementById('alumniAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Alumni.list();
+    document.getElementById('alumniCount').textContent = `${res.total || 0} total`;
+    if (!res.alumni?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No registrations</div>'; return; }
+    list.innerHTML = res.alumni.map(a => `
+      <div class="p-4 flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-bold">${a.name}</span>
+            <span class="text-[10px] bg-brand-surface dark:bg-emerald-950 text-brand-mid px-2 py-0.5 rounded-full font-bold">Batch ${a.batch}</span>
+          </div>
+          <div class="text-xs text-slate-500 mt-1">${[a.currentOccupation, a.city].filter(Boolean).join(' • ')}</div>
+          <div class="text-xs text-slate-600 mt-1"><a href="tel:${a.phone}" class="text-brand-mid hover:underline mr-3">📞 ${a.phone}</a>${a.email ? `<a href="mailto:${a.email}" class="text-brand-mid hover:underline">✉️ ${a.email}</a>` : ''}</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <a href="https://wa.me/91${a.phone}" target="_blank" class="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg"><i class="fa-brands fa-whatsapp"></i></a>
+          <button onclick="deleteAlumni('${a._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteAlumni(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Alumni.remove(id); window.API.showToast('Deleted', 'success'); loadAlumniAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// PAYMENTS
+// ============================================================
+async function loadPaymentsAdmin() {
+  const tbody = document.getElementById('paymentsTbody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">Loading...</td></tr>';
+  try {
+    const res = await window.API.Payments.list();
+    document.getElementById('payTotal').textContent = res.total || 0;
+    document.getElementById('payPaid').textContent = res.paid || 0;
+    document.getElementById('payCollected').textContent = '₹ ' + (res.totalCollected || 0).toLocaleString('en-IN');
+    if (!res.payments?.length) { tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500">No payments</td></tr>'; return; }
+    const colors = { paid:'bg-emerald-100 text-emerald-800', created:'bg-amber-100 text-amber-800', failed:'bg-red-100 text-red-800' };
+    tbody.innerHTML = res.payments.map(p => `
+      <tr class="border-b border-slate-100 dark:border-slate-800">
+        <td class="p-3 text-[11px]">${new Date(p.createdAt).toLocaleString('en-IN')}</td>
+        <td class="p-3"><div class="font-semibold">${p.studentName}</div><div class="text-[10px] text-slate-500">Roll: ${p.rollNo}</div></td>
+        <td class="p-3">${p.className}</td>
+        <td class="p-3 text-[11px]">${p.purpose}</td>
+        <td class="p-3 text-center font-black text-brand-forest dark:text-brand-brightgold">₹ ${p.amount.toLocaleString('en-IN')}</td>
+        <td class="p-3 text-center"><span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${colors[p.status] || ''}">${p.status.toUpperCase()}</span></td>
+        <td class="p-3 text-center">
+          ${p.status === 'paid' ? `<a href="${API_BASE}/payments/${p.orderId}/receipt" target="_blank" class="text-brand-mid hover:bg-brand-surface p-1.5 rounded inline-block"><i class="fa-solid fa-receipt text-xs"></i></a>` : ''}
+          <button onclick="deletePayment('${p._id}')" class="text-red-500 hover:bg-red-50 p-1.5 rounded ml-1"><i class="fa-solid fa-trash text-xs"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) { tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-500 text-xs">${err.message}</td></tr>`; }
+}
+async function deletePayment(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Payments.remove(id); window.API.showToast('Deleted', 'success'); loadPaymentsAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// BULK WHATSAPP
+// ============================================================
+const WA_TEMPLATES = {
+  custom: '',
+  fee: 'नमस्ते {name} जी,\n\nसतपुड़ा वैली स्कूल की ओर से सूचित किया जाता है कि फीस की देय तिथि नजदीक है। कृपया समय पर भुगतान करें।\n\n🙏 धन्यवाद\n📞 +91 94078 96997',
+  exam: 'नमस्ते {name} जी,\n\nआगामी परीक्षा की तैयारी शुरू हो गई है। कृपया बच्चों को पढ़ाई के लिए प्रेरित करें।\n\n— सतपुड़ा वैली स्कूल',
+  holiday: 'नमस्ते {name} जी,\n\nस्कूल में छुट्टी की सूचना दी जाती है।',
+  ptm: 'नमस्ते {name} जी,\n\nParent-Teacher Meeting आयोजित की जा रही है। कृपया उपस्थित हों।',
+  result: 'नमस्ते {name} जी,\n\nबच्चे का परीक्षा परिणाम घोषित हो गया है। वेबसाइट पर देखें।'
+};
+function loadWaTemplate() {
+  const type = document.getElementById('waTemplate').value;
+  if (type === 'custom') return;
+  document.getElementById('waMessage').value = WA_TEMPLATES[type] || '';
+}
+async function generateWaLinks() {
+  const message = document.getElementById('waMessage').value.trim();
+  if (!message) return window.API.showToast('Please type message', 'error');
+  const container = document.getElementById('waLinksContainer');
+  const list = document.getElementById('waLinksList');
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6 col-span-2">Loading...</div>';
+  container.classList.remove('hidden');
+  try {
+    const res = await window.API.Enquiries.list({ limit: 500 });
+    const parents = res.enquiries || [];
+    if (!parents.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6 col-span-2">No parents found</div>'; return; }
+    document.getElementById('waCount').textContent = parents.length;
+    list.innerHTML = parents.map(p => {
+      const personalized = message.replace(/{name}/g, p.childName || p.parentName);
+      const url = `https://wa.me/91${p.phone}?text=${encodeURIComponent(personalized)}`;
+      return `
+        <a href="${url}" target="_blank" class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-brand-darkcard border border-slate-200 dark:border-slate-800 hover:border-emerald-500 transition">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0"><i class="fa-brands fa-whatsapp"></i></div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-sm truncate">${p.parentName}</div>
+            <div class="text-[11px] text-slate-500 truncate">${p.childName} • ${p.grade} • ${p.phone}</div>
+          </div>
+        </a>
+      `;
+    }).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6 col-span-2">${err.message}</div>`; }
+}
+
+// ============================================================
+// TIMETABLE
+// ============================================================
+function renderPeriodRows() {
+  const c = document.getElementById('periodRows');
+  if (!c) return;
+  c.innerHTML = '';
+  for (let i = 1; i <= 6; i++) {
+    const row = document.createElement('div');
+    row.className = 'grid grid-cols-12 gap-2 tt-period-row';
+    row.dataset.period = i;
+    row.innerHTML = `
+      <div class="col-span-1 flex items-center justify-center bg-brand-mid text-white rounded-lg text-xs font-black">${i}</div>
+      <input type="text" placeholder="Time" class="tt-time col-span-3 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white" />
+      <input type="text" placeholder="Subject" class="tt-subject col-span-4 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white" />
+      <input type="text" placeholder="Teacher" class="tt-teacher col-span-4 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white" />
+    `;
+    c.appendChild(row);
+  }
+}
+renderPeriodRows();
+
+document.getElementById('timetableForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const periods = [...document.querySelectorAll('.tt-period-row')].map(r => ({
+    period: r.dataset.period,
+    time: r.querySelector('.tt-time').value.trim(),
+    subject: r.querySelector('.tt-subject').value.trim(),
+    teacher: r.querySelector('.tt-teacher').value.trim()
+  })).filter(p => p.subject);
+  if (!periods.length) return window.API.showToast('Add at least one subject', 'error');
+  try {
+    await window.API.Timetable.save({
+      className: document.getElementById('ttClass').value,
+      day: document.getElementById('ttDay').value,
+      periods
+    });
+    window.API.showToast('Timetable saved!', 'success');
+    loadTimetableAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadTimetableAdmin() {
+  const list = document.getElementById('timetableAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.Timetable.list();
+    if (!res.timetable?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No timetable</div>'; return; }
+    list.innerHTML = res.timetable.map(t => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between gap-4">
+        <div>
+          <div class="font-black text-sm">${t.className} <span class="text-brand-mid dark:text-brand-brightgold ml-2">${t.day}</span></div>
+          <div class="text-xs text-slate-500 mt-1">${t.periods.length} periods</div>
+        </div>
+        <button onclick="deleteTimetable('${t._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteTimetable(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.Timetable.remove(id); window.API.showToast('Deleted', 'success'); loadTimetableAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// LIVE CLASSES
+// ============================================================
+document.getElementById('liveClassForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    await window.API.LiveClasses.create({
+      title: document.getElementById('lcTitle').value.trim(),
+      className: document.getElementById('lcClass').value,
+      subject: document.getElementById('lcSubject').value.trim(),
+      teacher: document.getElementById('lcTeacher').value.trim(),
+      meetLink: document.getElementById('lcLink').value.trim(),
+      startTime: document.getElementById('lcTime').value,
+      duration: Number(document.getElementById('lcDuration').value) || 45
+    });
+    window.API.showToast('Live class scheduled!', 'success');
+    e.target.reset();
+    loadLiveClassesAdmin();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+async function loadLiveClassesAdmin() {
+  const list = document.getElementById('liveClassesAdminList');
+  if (!list) return;
+  list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">Loading...</div>';
+  try {
+    const res = await window.API.LiveClasses.list();
+    if (!res.liveClasses?.length) { list.innerHTML = '<div class="text-center text-slate-500 text-xs py-6">No live classes</div>'; return; }
+    list.innerHTML = res.liveClasses.map(c => `
+      <div class="bg-white dark:bg-brand-darkcard rounded-xl border border-slate-200 dark:border-slate-800 p-4 flex items-start justify-between gap-4">
+        <div>
+          <div class="font-bold">${c.title}</div>
+          <div class="text-xs text-slate-500 mt-1">${c.className} ${c.subject ? '• ' + c.subject : ''} ${c.teacher ? '• ' + c.teacher : ''}</div>
+          <div class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-clock mr-1"></i>${new Date(c.startTime).toLocaleString('en-IN')} (${c.duration} min)</div>
+        </div>
+        <button onclick="deleteLiveClass('${c._id}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg"><i class="fa-solid fa-trash text-xs"></i></button>
+      </div>
+    `).join('');
+  } catch (err) { list.innerHTML = `<div class="text-red-500 text-xs text-center py-6">${err.message}</div>`; }
+}
+async function deleteLiveClass(id) {
+  if (!confirm('Delete?')) return;
+  try { await window.API.LiveClasses.remove(id); window.API.showToast('Deleted', 'success'); loadLiveClassesAdmin(); }
+  catch (err) { window.API.showToast(err.message, 'error'); }
+}
+
+// ============================================================
+// ATTENDANCE
+// ============================================================
+function addAttendanceRow(roll = '', name = '') {
+  const sheet = document.getElementById('attSheet');
+  if (sheet.querySelector('.text-center')) sheet.innerHTML = '';
+  const row = document.createElement('div');
+  row.className = 'att-row grid grid-cols-12 gap-2 items-center';
+  row.innerHTML = `
+    <input type="text" placeholder="Roll" value="${roll}" class="att-roll col-span-2 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white" />
+    <input type="text" placeholder="Name" value="${name}" class="att-name col-span-5 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white" />
+    <select class="att-status col-span-3 px-2 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 dark:bg-brand-darkcard dark:text-white">
+      <option value="present">Present</option><option value="absent">Absent</option>
+      <option value="late">Late</option><option value="leave">Leave</option>
+    </select>
+    <button type="button" onclick="this.parentElement.remove()" class="col-span-2 text-red-500 hover:bg-red-50 rounded-lg py-1"><i class="fa-solid fa-trash text-xs"></i></button>
+  `;
+  sheet.appendChild(row);
+}
+function loadAttendanceSheet() {
+  const cls = document.getElementById('attClass').value;
+  const date = document.getElementById('attDate').value;
+  if (!cls || !date) return window.API.showToast('Select class & date', 'error');
+  document.getElementById('attSheet').innerHTML = '';
+  document.getElementById('attSaveSection').classList.remove('hidden');
+  for (let i = 0; i < 5; i++) addAttendanceRow('', '');
+}
+async function saveAttendance() {
+  const cls = document.getElementById('attClass').value;
+  const date = document.getElementById('attDate').value;
+  const rows = [...document.querySelectorAll('.att-row')].map(r => ({
+    rollNo: r.querySelector('.att-roll').value.trim(),
+    studentName: r.querySelector('.att-name').value.trim(),
+    status: r.querySelector('.att-status').value
+  })).filter(r => r.rollNo);
+  if (!rows.length) return window.API.showToast('Add at least one student', 'error');
+  try {
+    window.API.showLoader(true);
+    await window.API.Attendance.bulkSave({ className: cls, date, records: rows });
+    window.API.showToast(`${rows.length} records saved!`, 'success');
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+  finally { window.API.showLoader(false); }
+}
+
+// ============================================================
+// ANALYTICS
+// ============================================================
+async function loadAnalytics() {
+  try {
+    const res = await window.API.Analytics.dashboard();
+    const s = res.stats;
+    document.getElementById('anaTotalEnq').textContent = s.totalEnquiries;
+    document.getElementById('anaWeeklyEnq').textContent = `+${s.weeklyEnquiries} this week`;
+    document.getElementById('anaRevenue').textContent = '₹' + (s.totalRevenue || 0).toLocaleString('en-IN');
+    document.getElementById('anaMonthRevenue').textContent = `₹${(s.monthlyPayments.total || 0).toLocaleString('en-IN')} this month`;
+    document.getElementById('anaPayments').textContent = s.totalPayments;
+    document.getElementById('anaPaidPayments').textContent = `${s.totalPaid} successful`;
+    document.getElementById('anaContent').textContent = s.totalNotices + s.totalVideos + s.totalGalleryImages + s.totalFaculty + s.totalAchievements + s.totalNews;
+    document.getElementById('anaNotices').textContent = s.totalNotices;
+    document.getElementById('anaVideos').textContent = s.totalVideos;
+    document.getElementById('anaGallery').textContent = s.totalGalleryImages;
+    document.getElementById('anaFaculty').textContent = s.totalFaculty;
+    document.getElementById('anaAchievements').textContent = s.totalAchievements;
+    document.getElementById('anaNews').textContent = s.totalNews;
+    document.getElementById('anaJobs').textContent = s.totalJobs;
+    document.getElementById('anaAlumni').textContent = s.totalAlumni;
+
+    const tc = document.getElementById('anaTopClasses');
+    if (s.topClasses?.length) {
+      const max = Math.max(...s.topClasses.map(c => c.count));
+      tc.innerHTML = s.topClasses.map(c => `
+        <div>
+          <div class="flex justify-between text-xs font-bold mb-1"><span>${c._id}</span><span>${c.count}</span></div>
+          <div class="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-mid to-brand-brightgold" style="width:${(c.count / max * 100)}%"></div></div>
+        </div>
+      `).join('');
+    } else { tc.innerHTML = '<div class="text-center text-slate-500 text-xs py-4">No data</div>'; }
+
+    const re = document.getElementById('anaRecentEnq');
+    if (s.recentEnquiries?.length) {
+      re.innerHTML = s.recentEnquiries.map(e => `
+        <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-brand-dark">
+          <div>
+            <div class="font-bold text-sm">${e.parentName} <span class="text-slate-500 font-normal">→ ${e.childName}</span></div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${e.grade} • ${new Date(e.createdAt).toLocaleDateString('en-IN')}</div>
+          </div>
+          <a href="https://wa.me/91${e.phone}" target="_blank" class="text-emerald-600 hover:bg-emerald-50 p-2 rounded-lg"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      `).join('');
+    } else { re.innerHTML = '<div class="text-center text-slate-500 text-xs py-4">No recent</div>'; }
+  } catch (err) { console.error('Analytics error:', err); }
+}
+
+// ============================================================
+// CHANGE PASSWORD
+// ============================================================
+document.getElementById('pwdForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const cur = document.getElementById('curPwd').value;
+  const nw = document.getElementById('newPwd').value;
+  const conf = document.getElementById('confPwd').value;
+  if (nw !== conf) return window.API.showToast('Passwords do not match', 'error');
+  if (nw.length < 6) return window.API.showToast('Password too short', 'error');
+  try {
+    await window.API.Auth.changePassword(cur, nw);
+    window.API.showToast('Password updated!', 'success');
+    e.target.reset();
+  } catch (err) { window.API.showToast(err.message, 'error'); }
+});
+</script>
+
+</body>
+</html>

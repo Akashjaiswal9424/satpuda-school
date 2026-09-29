@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parent Portal | Satpuda Valley School</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<script>tailwind.config={theme:{extend:{fontFamily:{poppins:['Poppins'],inter:['Inter']},colors:{brand:{forest:'#0a341b',mid:'#1a6b38',brightgold:'#ffbe2e',surface:'#e8f5e9',mintbg:'#f2f9f4',gold:'#e6a117'}}}}}</script>
+<style>body{font-family:'Inter',sans-serif}h1,h2,h3{font-family:'Poppins',sans-serif}</style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased">
+
+<header class="bg-brand-forest text-white py-4 shadow-lg">
+  <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-brand-brightgold flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-brand-forest"></i></div>
+      <div><div class="font-black text-sm">Satpuda Valley</div><div class="text-[10px] text-brand-brightgold uppercase">Parent Portal</div></div>
+    </a>
+    <a href="index.html" class="text-xs font-bold px-4 py-2 rounded-lg bg-white/10 hover:bg-brand-brightgold hover:text-brand-forest transition"><i class="fa-solid fa-arrow-left mr-1"></i> Home</a>
+  </div>
+</header>
+
+<main class="max-w-3xl mx-auto px-4 py-12">
+
+  <div id="parentLogin" class="bg-white rounded-3xl shadow-xl border-2 border-brand-brightgold/40 p-8">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 mx-auto rounded-full bg-brand-brightgold flex items-center justify-center mb-3">
+        <i class="fa-solid fa-user-group text-brand-forest text-2xl"></i>
+      </div>
+      <h1 class="text-2xl font-black text-brand-forest">Parent Portal</h1>
+      <p class="text-xs text-slate-500 mt-1">अपने बच्चे की उपस्थिति देखें</p>
+    </div>
+
+    <form id="parentLoginForm" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Student Roll Number *</label>
+        <input type="text" id="pRoll" required placeholder="e.g. 101" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-brand-mid" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase text-slate-600 mb-1">Class *</label>
+        <select id="pClass" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm">
+          <option value="">Select Class</option>
+          <option>Nursery / KG</option>
+          <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+          <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+          <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+          <option>Class 10</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-brightgold to-brand-gold text-brand-forest font-black uppercase text-sm">
+        <i class="fa-solid fa-right-to-bracket mr-1"></i> View Attendance
+      </button>
+      <p class="text-[11px] text-slate-500 text-center">Demo: Roll 101, Class 10</p>
+    </form>
+  </div>
+
+  <div id="parentDashboard" class="hidden space-y-6">
+    <div class="bg-white rounded-3xl shadow-xl border-2 border-brand-brightgold/40 p-6">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h2 class="text-xl font-black text-brand-forest" id="pStudentName">Student</h2>
+          <p class="text-xs text-slate-500" id="pStudentInfo"></p>
+        </div>
+        <button onclick="parentLogout()" class="text-xs px-3 py-1.5 rounded-lg bg-red-100 text-red-600 font-bold">
+          <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+        </button>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        <div class="p-4 rounded-xl bg-emerald-50 border-2 border-emerald-200 text-center">
+          <div class="text-3xl font-black text-emerald-600" id="pPresent">0</div>
+          <div class="text-[10px] font-bold uppercase text-emerald-700">Present</div>
+        </div>
+        <div class="p-4 rounded-xl bg-red-50 border-2 border-red-200 text-center">
+          <div class="text-3xl font-black text-red-600" id="pAbsent">0</div>
+          <div class="text-[10px] font-bold uppercase text-red-700">Absent</div>
+        </div>
+        <div class="p-4 rounded-xl bg-amber-50 border-2 border-amber-200 text-center">
+          <div class="text-3xl font-black text-amber-600" id="pPercent">0%</div>
+          <div class="text-[10px] font-bold uppercase text-amber-700">Percent</div>
+        </div>
+      </div>
+
+      <h3 class="text-sm font-black text-brand-forest uppercase mb-3">
+        <i class="fa-solid fa-calendar-check text-brand-brightgold mr-1"></i> Recent Records
+      </h3>
+      <div id="attendanceList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+    </div>
+  </div>
+</main>
+
+<script src="js/api.js"></script>
+<script>
+let currentStudent = null;
+
+document.getElementById('parentLoginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const roll = document.getElementById('pRoll').value.trim();
+  const cls = document.getElementById('pClass').value;
+  if (!roll || !cls) return;
+
+  try {
+    const res = await window.API.Attendance.student(roll, cls);
+    if (!res.records?.length) {
+      window.API.showToast('No attendance records found', 'error');
+      return;
+    }
+    currentStudent = { roll, cls, name: res.records[0]?.studentName || 'Student' };
+
+    document.getElementById('pStudentName').textContent = currentStudent.name;
+    document.getElementById('pStudentInfo').textContent = `Roll ${roll} • ${cls}`;
+    document.getElementById('pPresent').textContent = res.present;
+    document.getElementById('pAbsent').textContent = (res.total - res.present);
+    document.getElementById('pPercent').textContent = res.percentage + '%';
+
+    document.getElementById('attendanceList').innerHTML = res.records.slice(0, 60).map(r => {
+      const colors = {
+        present: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        absent: 'bg-red-100 text-red-800 border-red-200',
+        leave: 'bg-amber-100 text-amber-800 border-amber-200',
+        late: 'bg-blue-100 text-blue-800 border-blue-200'
+      };
+      return `
+        <div class="flex items-center justify-between p-3 rounded-xl border-2 ${colors[r.status]}">
+          <span class="text-xs font-bold">${new Date(r.date).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+          <span class="text-[11px] font-black uppercase">${r.status}</span>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('parentLogin').classList.add('hidden');
+    document.getElementById('parentDashboard').classList.remove('hidden');
+  } catch (err) {
+    window.API.showToast(err.message || 'Unable to load', 'error');
+  }
+});
+
+function parentLogout() {
+  currentStudent = null;
+  document.getElementById('parentDashboard').classList.add('hidden');
+  document.getElementById('parentLogin').classList.remove('hidden');
+  document.getElementById('parentLoginForm').reset();
+}
+</script>
+
+</body>
+</html>

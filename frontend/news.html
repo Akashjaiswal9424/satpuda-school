@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>News | Satpuda Valley School</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>body{font-family:'Inter',sans-serif}h1,h2,h3{font-family:'Poppins',sans-serif}</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+<header class="bg-[#0a341b] text-white py-4 sticky top-0 z-40 shadow-lg">
+  <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-[#ffbe2e] flex items-center justify-center"><i class="fa-solid fa-graduation-cap text-[#0a341b]"></i></div>
+      <div><div class="font-black text-sm">Satpuda Valley</div><div class="text-[10px] text-[#ffbe2e] uppercase">International Public School</div></div>
+    </a>
+    <a href="index.html#news" class="text-xs font-bold px-4 py-2 rounded-lg bg-white/10 hover:bg-[#ffbe2e] hover:text-[#0a341b] transition">
+      <i class="fa-solid fa-arrow-left mr-1"></i> All News
+    </a>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 py-12">
+  <div id="newsContent" class="bg-white rounded-3xl shadow-xl border p-8 sm:p-12">
+    <div class="text-center py-12 text-slate-500 text-sm">
+      <div class="inline-block w-10 h-10 border-4 border-[#1a6b38] border-t-[#ffbe2e] rounded-full animate-spin mb-3"></div>
+      <p>Loading...</p>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-[#0a341b] text-slate-300 py-6 mt-12">
+  <div class="max-w-4xl mx-auto px-4 text-center text-xs">© 2026 Satpuda Valley International Public School.</div>
+</footer>
+
+<script>
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000/api' : 'https://satpuda-school-api.onrender.com/api';
+const BACKEND_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000' : 'https://satpuda-school-api.onrender.com';
+
+const params = new URLSearchParams(window.location.search);
+const slug = params.get('slug');
+
+async function load() {
+  if (!slug) {
+    document.getElementById('newsContent').innerHTML = '<div class="text-center py-12 text-red-500">Invalid link</div>';
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/news/${slug}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    const n = data.news;
+    document.title = n.title + ' | Satpuda Valley School';
+    document.getElementById('newsContent').innerHTML = `
+      <div class="mb-6">
+        <span class="text-xs font-black uppercase text-[#1a6b38] bg-[#e8f5e9] px-3 py-1 rounded-full">${n.category}</span>
+        <span class="text-xs text-slate-500 ml-2">${new Date(n.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-black text-[#0a341b] leading-tight mb-4">${n.title}</h1>
+      ${n.imageUrl ? `<img src="${n.imageUrl.startsWith('http') ? n.imageUrl : BACKEND_BASE + n.imageUrl}" class="w-full rounded-2xl my-6 shadow-lg" />` : ''}
+      <div class="text-base leading-relaxed text-slate-700 whitespace-pre-line">${n.content}</div>
+      <div class="mt-10 pt-6 border-t text-xs text-slate-500 flex justify-between">
+        <span>👁️ ${n.views || 0} views</span>
+        <a href="index.html#news" class="text-[#1a6b38] font-bold">← Back to all news</a>
+      </div>
+    `;
+  } catch (err) {
+    document.getElementById('newsContent').innerHTML = `<div class="text-center py-12 text-red-500">
+      <i class="fa-solid fa-circle-exclamation text-4xl mb-3"></i>
+      <p>News not found</p>
+      <a href="index.html#news" class="inline-block mt-4 text-[#1a6b38] underline">← Back to home</a>
+    </div>`;
+  }
+}
+load();
+</script>
+
+</body>
+</html>

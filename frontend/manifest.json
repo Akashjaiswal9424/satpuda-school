@@ -1,0 +1,21 @@
+{
+  "name": "Satpuda Valley International Public School",
+  "short_name": "Satpuda Valley",
+  "description": "Premier English & Hindi medium school in Batkakhapa, Harrai Road, M.P.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a341b",
+  "theme_color": "#114b27",
+  "lang": "en-IN",
+  "categories": ["education", "school"],
+  "icons": [
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Check Result", "short_name": "Results", "url": "/index.html#results" },
+    { "name": "Apply Admission", "short_name": "Admission", "url": "/index.html#enquiry" }
+  ]
+}
