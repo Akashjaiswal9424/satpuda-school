@@ -2,7 +2,7 @@
 // SATPUDA VALLEY SCHOOL - API SERVICE LAYER
 // ============================================================
 
-const API_BASE = 'http://localhost:5000/api';
+const API_URL = 'https://satpuda-school.onrender.com';
 
 // ============ CORE FETCH ============
 async function apiRequest(endpoint, options = {}) {
